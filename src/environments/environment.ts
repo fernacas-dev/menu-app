@@ -3,7 +3,13 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  APPWRITE_ENDPOINT: 'https://srv53119-206152.vps.etecsa.cu/v1',
+  APPWRITE_PROJECT: '63ae84f56defda4c07e1',
+  endpoint: 'https://srv53119-206152.vps.etecsa.cu/v1',
+  projectId: 'ngchat',
+  databaseId: 'chat',
+  chatCollectionId: 'messages',
 };
 
 /*
