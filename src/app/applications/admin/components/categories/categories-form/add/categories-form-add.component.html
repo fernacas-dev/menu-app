@@ -1,0 +1,8 @@
+<h5 class="card-title">{{formTitle}}</h5>
+<form [formGroup]="form" (ngSubmit)="save($event)">
+  <div class="mb-3">
+    <label for="formName" class="form-label">Name</label>
+    <input class="form-control" id="formName" matInput placeholder="Bar" type="text" formControlName="name">
+  </div>
+  <button class="btn btn-primary float-end">Add</button>
+</form>

@@ -1,11 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-  BehaviorSubject, 
+  BehaviorSubject,
   concatMap,
   from,
-  tap,
-  mergeMap
 } from 'rxjs';
 import { AppwriteApi } from './appwrite';
 
@@ -21,14 +19,13 @@ export class AuthService {
 
  constructor(private router: Router) {}
 
- login(name: string) {
-  const authReq = this.appwriteAPI.account.createAnonymousSession();
-
+ login(email: string, password: string) {
+  const authReq = this.appwriteAPI.account.createEmailSession(email, password);
    return from(authReq).pipe(
-     mergeMap(() => this.appwriteAPI.account.updateName(name)),
      concatMap(() => this.appwriteAPI.account.get()),
-     tap((user: any) => this._user.next(user))
-   );
+   ).subscribe(user => {
+      this._user.next(user)
+   });
  }
 
  async isLoggedIn() {
@@ -47,8 +44,16 @@ export class AuthService {
    } catch (e) {
      console.log(`${e}`);
    } finally {
-     this.router.navigate(['/']);
+     this.router.navigate(['/login']);
      this._user.next(null);
    }
+ }
+
+ IsLogged(): boolean {
+  const userData = localStorage.getItem('cookieFallback');
+  if(userData && userData !== "[]"){
+    return true;
+  }
+  return false;
  }
 }

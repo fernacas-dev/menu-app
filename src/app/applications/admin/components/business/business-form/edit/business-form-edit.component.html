@@ -1,0 +1,20 @@
+<h5 class="card-title">{{ formTitle  }}</h5>
+<form [formGroup]="form" (ngSubmit)="save($event)">
+  <div class="mb-3">
+    <label for="formUserOwnerId" class="form-label">User Owner Id</label>
+    <input class="form-control" id="formUserOwnerId" matInput [placeholder]="data.userOwnerId" [value]="data.userOwnerId" type="text" formControlName="userOwnerId">
+  </div>
+  <div class="mb-3">
+    <label for="formName" class="form-label">Name</label>
+    <input class="form-control" id="formName" matInput [placeholder]="data.name" [value]="data.name" type="text" formControlName="name">
+  </div>
+  <div class="mb-3">
+    <label for="formCategoryId" class="form-label">Category Id</label>
+    <select class="form-control" id="formCategoryId" matInput formControlName="categoryId">
+      <option *ngFor="let category of categories" value="{{category.$id}}">{{category.name}}</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary float-end">Update</button>
+  <button class="btn btn-danger float-end" style="margin-right: 10px;" (click)="cancel()">Cancel</button>
+
+</form>

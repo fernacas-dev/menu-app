@@ -1,0 +1,16 @@
+<h5 class="card-title">{{ formTitle  }}</h5>
+<form [formGroup]="form" (ngSubmit)="save($event)">
+  <div class="mb-3">
+    <label for="formName" class="form-label">Name</label>
+    <input class="form-control" id="formName" matInput [placeholder]="data.name" [value]="data.name" type="text" formControlName="name">
+  </div>
+  <div class="mb-3">
+    <label for="formBusinessId" class="form-label">Business Id</label>
+    <select class="form-control" id="formBusinessId" matInput formControlName="businessId">
+      <option *ngFor="let item of business" value="{{item.$id}}">{{item.name}}</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary float-end">Update</button>
+  <button class="btn btn-danger float-end" style="margin-right: 10px;" (click)="cancel()">Cancel</button>
+
+</form>

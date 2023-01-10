@@ -1,57 +1,29 @@
-import { Injectable } from '@angular/core';
-import { Client, Account} from 'appwrite';
-import { Models } from 'appwrite/types/models';
-import { BehaviorSubject } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { inject, Injectable } from '@angular/core';
+import { ID} from 'appwrite';
+import { BehaviorSubject, concatMap, from, mergeMap, of, Subject, switchMap, tap } from 'rxjs';
+import { UserDto } from '../models/user.model';
+import { AppwriteApi } from './appwrite';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  client: Client;
-  account: Account;
+  private appwriteAPI = inject(AppwriteApi);
 
-  logged = new BehaviorSubject<any>({});
-  logged$ = this.logged.asObservable();
+  private logged = new Subject<any | null>();
 
-  constructor() {
-    this.client = new Client();
-    this.client
-    .setEndpoint(environment.APPWRITE_ENDPOINT)
-    .setProject(environment.APPWRITE_PROJECT);
-    this.account = new Account(this.client);
+  readonly logged$ = this.logged.asObservable();
 
-  }
+  constructor() {}
 
-  login(){
-    const promise = this.account.createEmailSession('fernando@gmail.com', 'Ferna9606*');
-    promise.then(function (response) {
-        console.log(response); // Success
+  createAccount(userDto: UserDto){
+    const registerResponse = this.appwriteAPI.account.create(ID.unique(), userDto.email, userDto.password );
 
-    }, function (error) {
-        console.log(error); // Failure
-    });
-  }
-
-  createAccount(){
-
-
-
-    const promise = this.account.create('123', 'fernando@gmail.com', 'Ferna9606*');
-    promise.then(function (response) {
-        console.log(response); // Success
-    }, function (error) {
-        console.log(error); // Failure
-    });
-  }
-
-  getProfile() {
-
-  }
-
-  changeProfile() {
-
+    return from(registerResponse).pipe(
+      mergeMap(() => this.appwriteAPI.account.updateName(userDto.name)),
+      concatMap(() => this.appwriteAPI.account.get()),
+    ).subscribe((user: any) => this.logged.next(user));
   }
 
 }

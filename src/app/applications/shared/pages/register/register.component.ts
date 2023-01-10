@@ -17,15 +17,14 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.logged$.subscribe((response) => {
-
+      console.log('Usuario creado ' + JSON.stringify(response));
     });
-
   }
 
   private buildForm(){
     this.registerForm = this.formBuilder.group({
       name: ['', [Validators.required]],
-      username: ['', [Validators.required]],
+      email: ['', [Validators.required]],
       password: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
     });
@@ -33,9 +32,12 @@ export class RegisterComponent implements OnInit {
 
   save(event: Event) {
     if(this.registerForm?.valid){
-      console.log(this.registerForm.value);
-      //this.userService.createAccount();
-      this.userService.login();
+      try{
+        this.userService.createAccount(this.registerForm.value);
+      }catch(error){
+        console.log(error)
+      }
+
     }else{
       this.registerForm?.markAllAsTouched();
     }

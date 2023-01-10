@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="col-8">
+    <app-table
+      [headTable]="headTable"
+      [dataTable]="dataTable"
+      (editItemId)="editItemId($event)"
+      (deleteItemId)="deleteItemId($event)"
+    ></app-table>
+  </div>
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <app-categories-form-add *ngIf="!isEditing" formTitle="Add Category"></app-categories-form-add>
+        <app-categories-form-edit
+          *ngIf="isEditing"
+          (closingForm)="closeEditForm($event)"
+          [data]="dataItem"
+          formTitle="Edit Category"
+        ></app-categories-form-edit>
+      </div>
+    </div>
+  </div>
+</div>
+
+
